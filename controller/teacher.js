@@ -7,17 +7,17 @@ export const registerTeacher = async (req, res) => {
     if (err) {
       return res.status(500).json({ success: false, message: "File upload failed", error: err.message });
     }
-    const { fullName, aadharCard, email, contact, address, qualification, subject, categories, gender, age, salary, degree, experience } = req.body;
-    
+    const { fullName, aadharCard, email,registerId, contact, address, qualification, subject, categories, gender, age, salary, degree, experience } = req.body;
+
 
     try {
       // Check if all required fields are provided
-      if (!fullName || !aadharCard || !email || !contact || !subject || !address || !qualification || !categories || !gender || !age || !salary || !degree || !experience) {
+      if (!fullName || !aadharCard || !email || !contact || !registerId || !subject || !address || !qualification || !categories || !gender || !age || !salary || !degree || !experience) {
         return res.status(400).json({ success: false, message: "All fields are required" });
       }
 
       // Check if the teacher already exists
-      const existingTeacher = await teacherModel.findOne({ aadharCard });
+      const existingTeacher = await teacherModel.findOne({ registerId });
       if (existingTeacher) {
         return res.status(409).json({ success: false, message: "Teacher already exists" });
       }
@@ -28,6 +28,7 @@ export const registerTeacher = async (req, res) => {
         aadharCard,
         email,
         contact,
+        registerId,
         address,
         qualification,
         subject,
@@ -45,7 +46,7 @@ export const registerTeacher = async (req, res) => {
         const result = await cloudinary.uploader.upload(req.file.path, {
           folder: 'profile_photos',
         });
-console.log(req.file)
+        console.log(req.file)
         // Update the student record with the profile photo URL
         teacherSave.profilePhoto = result.secure_url;
         await teacherSave.save();

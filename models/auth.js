@@ -5,14 +5,19 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    email: {
+    password:{
+        type:String,
+        required:true
+    },
+    registerId: {
         type: String,
         required: true,
-        unique: true
+       
     },
-    password: {
+    mobile: {
         type: String,
         required: true
+      
     },
     role: { type: String, enum: ["student", "teacher", "admin"], },
 });

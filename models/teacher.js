@@ -29,6 +29,11 @@ const teacherSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    registerId:{
+        type:String,
+        required:true,
+        unique:true
+    },
     degree: {
         type: String,
         required: true,

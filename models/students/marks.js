@@ -15,13 +15,12 @@ const marksSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  studentID: {
+  registerId: {
     type: String,
     required: true,
   },
-  rollNumber: {
+  studentEmail: {
     type: String,
-    required: true,
   },
   subjects: [
     {
@@ -47,7 +46,7 @@ const marksSchema = new mongoose.Schema({
       },
     },
   ],
-  defaultStudentId: { type: mongoose.Schema.Types.ObjectId, ref: 'createstudent' },
+  // defaultStudentId: { type: mongoose.Schema.Types.ObjectId, ref: 'createstudent' },
   createdAt: {
     type: Date,
     default: Date.now,

@@ -1,35 +1,51 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import Authentication from "../models/auth.js";
+import { checkStudentId, checkTeacherId } from "../middleware/checkAuth.js";
 
 const jwtSecret = "your_jwt_secret_key"; // Replace with your actual secret key
 
 export const Register = async (req, res) => {
-  const { fullName, email, password, role } = req.body;
-  console.log(role);
+  const { fullName, mobile, password, registerId, role } = req.body;
+  if (role === "teacher") {
+    const teacherResult = await checkTeacherId(registerId);
+    if (!teacherResult) {
+      return res.status(400).json({ success: false, message: "Teacher ID does not match" });
+    }
+  }
 
-  if (!fullName || !email || !password || !role) {
-    return res.status(400).json({ success: false, message: "Please fill all required fields" });
+  // Check if the role is student and validate student ID
+  if (role === "student") {
+    const studentResult = await checkStudentId(registerId);
+    console.log(studentResult)
+    if (!studentResult) {
+      return res.status(400).json({ success: false, message: "Student ID does not match" });
+    }
+  }
+ 
+  if (!fullName || !password || !registerId  || !role) {
+    return res.status(400).json({ success: false, message: " all required fields" });
   }
 
   try {
     // Check if user already exists
-    const existingUser = await Authentication.findOne({ email });
+    const existingUser = await Authentication.findOne({ registerId });
     if (existingUser) {
       return res.status(400).json({ success: false, message: "User already exists" });
     }
 
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 12);
-
+  
     // Create new user
     const newUser = new Authentication({
       fullName,
-      email,
+      mobile,
+      registerId:registerId,
       password: hashedPassword,
       role,
     });
-
+  console.log(newUser)
     await newUser.save();
 
     // Generate JWT token
@@ -51,35 +67,38 @@ export const Register = async (req, res) => {
     return res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
-export const fetchAuth = async(req,res)=>{
+export const fetchAuth = async (req, res) => {
   const { id } = req.params;
- console.log(id)
+  console.log(id)
   try {
-    const getAuth = await Authentication.findOne({_id:id})
+    const getAuth = await Authentication.findOne({ _id: id })
     console.log(getAuth)
-    if(!getAuth){
-      return res.status(400).json({success:false,message:"data not found"})
+    if (!getAuth) {
+      return res.status(400).json({ success: false, message: "data not found" })
     }
     console.log(getAuth)
-    res.status(200).json({success:true,message:"DATA found",data:{
-      role:getAuth.role,
-      id:getAuth._id
-    }})
+    res.status(200).json({
+      success: true, message: "DATA found", data: {
+        role: getAuth.role,
+        id: getAuth._id,
+        registerId:getAuth.registerId
+      }
+    })
 
   } catch (error) {
-    
+
   }
 }
 export const Login = async (req, res) => {
-  const { email, password } = req.body;
+  const { password,registerId } = req.body;
 
-  if (!email || !password) {
+  if (!password || !registerId) {
     return res.status(400).json({ success: false, message: "Please fill all required fields" });
   }
 
   try {
     // Check if user exists
-    const user = await Authentication.findOne({ email });
+    const user = await Authentication.findOne({ registerId });
     if (!user) {
       return res.status(400).json({ success: false, message: "User does not exist" });
     }
@@ -96,7 +115,7 @@ export const Login = async (req, res) => {
     // Set cookie
     res.cookie("token", token, { httpOnly: true });
 
-    res.status(200).json({ success: true, message: "Logged in successfully", token ,user});
+    res.status(200).json({ success: true, message: "Logged in successfully", token, user });
   } catch (error) {
     console.error("Error during login:", error);
     res.status(500).json({ success: false, message: "Internal Server Error" });

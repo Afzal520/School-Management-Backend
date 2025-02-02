@@ -17,9 +17,14 @@ const studentSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  studentId: {
+  registerId: {
     type: String,
     required: true,
+    unique:true
+  },
+  studentEmail:{
+    type:String,
+    required:true,
   },
   gender: {
     type: String,
