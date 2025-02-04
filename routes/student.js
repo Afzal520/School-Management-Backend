@@ -3,9 +3,9 @@ import { createStudent, editStudent, getAllStudent } from "../controller/student
 
 const router = express.Router()
 
-router.post("/stud",createStudent)
-router.get("/getstud",getAllStudent)
-router.put("/edit/:id",editStudent)
+router.post("/createstudent",createStudent)
+router.get("/getstudent",getAllStudent)
+router.put("/editstudent/:id",editStudent)
 
 
 export default router

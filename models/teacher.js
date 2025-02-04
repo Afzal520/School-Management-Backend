@@ -5,14 +5,7 @@ const teacherSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    qualification: {
-        type: String,
-        required: true,
-    },
-    aadharCard: {
-        type: String,
-        required: true
-    },
+  
     gender: {
         type: String,
         required: true,
@@ -42,10 +35,10 @@ const teacherSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    email: {
+    teacherEmail: {
         type: String,
         required: true,
-        unique: true,
+  
     },
     address: {
         type: String,
@@ -55,10 +48,7 @@ const teacherSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    categories: {
-        type: String,
-        required: true,
-    },
+  
     role: { type: String, enum: ["student", "teacher", "admin"], default: "teacher" },
     profilePhoto:{
      type:String

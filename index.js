@@ -18,7 +18,7 @@ const corsOptions = {
 dotenv.config()
 const app = express();
 app.use(cors(corsOptions))
-console.log(process.env.CLOUDINARY_CLOUD_NAME)
+
 connectDB()
 // Middleware to parse JSON bodies
 app.use(bodyParser.json());
@@ -27,10 +27,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/api/auth", authRouter);
-app.use("/post", noteRouter)
-app.use("/register",studentRouter)
+app.use("/api/post", noteRouter)
+
+app.use("/api/student",studentRouter)
 app.use("/api/teacher",teacherRouter)
-app.use("/api/student",markRouter)
+app.use("/api/studentmark",markRouter)
 
 
 const PORT = process.env.PORT || 5000;

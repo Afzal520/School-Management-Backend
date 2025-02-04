@@ -38,6 +38,10 @@ const studentSchema = mongoose.Schema({
     type:String,
     required: true,
   },
+  contact:{
+    type:String,
+
+  },
   role: { type: String, enum: ["student", "teacher", "admin"], default: "student" },
   profilePhoto: {
     type: String, // Assuming you store the URL of the uploaded photo

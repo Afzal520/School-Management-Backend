@@ -14,7 +14,7 @@ export const createStudent = async (req, res) => {
                 return res.status(400).json({ success: false, message: "File upload failed", error: err.message });
             }
 
-            const { fullName, gender, semester, subject, studentEmail, course, dob, fee } = req.body;
+            const { fullName, gender, semester, contact, subject, studentEmail, course, dob, fee } = req.body;
 
             // Validate all fields
             if (!fullName || !gender || !semester || !subject || !studentEmail || !course || !dob || !fee) {
@@ -62,6 +62,7 @@ export const createStudent = async (req, res) => {
                 studentEmail,
                 course,
                 dob,
+                contact,
                 fee,
             });
 
@@ -109,10 +110,11 @@ export const getAllStudent = async (req, res) => {
 
 export const editStudent = async (req, res) => {
     const { id } = req.params;
+    console.log(id)
     const updates = req.body;
 
     try {
-        const updatedStudent = await Student.findByIdAndUpdate(id, updates, {
+        const updatedStudent = await Student.findOneAndUpdate({registerId :id}, updates, {
             new: true,
             runValidators: true,
         });
