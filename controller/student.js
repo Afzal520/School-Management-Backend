@@ -110,7 +110,8 @@ export const getAllStudent = async (req, res) => {
 
 export const editStudent = async (req, res) => {
     const { id } = req.params;
-    console.log(id)
+    
+    
     const updates = req.body;
 
     try {

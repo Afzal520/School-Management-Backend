@@ -17,7 +17,7 @@ export const Register = async (req, res) => {
   // Check if the role is student and validate student ID
   if (role === "student") {
     const studentResult = await checkStudentId(registerId);
-    console.log(studentResult)
+  
     if (!studentResult) {
       return res.status(400).json({ success: false, message: "Student ID does not match" });
     }
@@ -45,7 +45,7 @@ export const Register = async (req, res) => {
       password: hashedPassword,
       role,
     });
-  console.log(newUser)
+
     await newUser.save();
 
     // Generate JWT token
@@ -69,14 +69,14 @@ export const Register = async (req, res) => {
 };
 export const fetchAuth = async (req, res) => {
   const { id } = req.params;
-  console.log(id)
+
   try {
     const getAuth = await Authentication.findOne({ _id: id })
-    console.log(getAuth)
+
     if (!getAuth) {
       return res.status(400).json({ success: false, message: "data not found" })
     }
-    console.log(getAuth)
+  
     res.status(200).json({
       success: true, message: "DATA found", data: {
         role: getAuth.role,
@@ -86,7 +86,7 @@ export const fetchAuth = async (req, res) => {
     })
 
   } catch (error) {
-
+    res.status(500).json({ success: false, message: "Internal Server Error", error: error.message });
   }
 }
 export const Login = async (req, res) => {
